@@ -2,6 +2,7 @@
   "name": "pulse-visuals-launcher",
   "version": "1.0.0",
   "description": "Pulse Visuals Launcher for Minecraft",
+  "author": "Pulse Visuals",
   "main": "src/main/main.js",
   "scripts": {
     "start": "electron .",
@@ -31,10 +32,6 @@
       "target": [{ "target": "AppImage", "arch": ["x64"] }],
       "icon": "assets/icon.png",
       "category": "Game"
-    },
-    "mac": {
-      "target": [{ "target": "dmg", "arch": ["x64"] }],
-      "icon": "assets/icon.icns"
     },
     "nsis": {
       "oneClick": false,
