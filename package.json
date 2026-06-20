@@ -1,6 +1,6 @@
 {
   "name": "pulse-visuals-launcher",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Pulse Visuals Launcher for Minecraft",
   "author": "Pulse Visuals",
   "main": "src/main/main.js",
@@ -49,8 +49,6 @@
     "electron-builder": "^24.9.1"
   },
   "dependencies": {
-    "electron-store": "^8.1.0",
-    "minecraft-launcher-core": "^3.6.1",
-    "msmc": "^4.1.2"
+    "electron-store": "^8.1.0"
   }
 }
