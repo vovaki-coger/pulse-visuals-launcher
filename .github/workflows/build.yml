@@ -14,9 +14,10 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'npm'
-      - run: npm ci
-      - run: npm run build:win
+      - name: Install dependencies
+        run: npm install
+      - name: Build Windows
+        run: npm run build:win
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions/upload-artifact@v4
@@ -31,9 +32,10 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'npm'
-      - run: npm ci
-      - run: npm run build:linux
+      - name: Install dependencies
+        run: npm install
+      - name: Build Linux
+        run: npm run build:linux
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions/upload-artifact@v4
@@ -54,6 +56,18 @@ jobs:
       - uses: softprops/action-gh-release@v2
         with:
           files: artifacts/**/*
-          generate_release_notes: true
+          name: "Pulse Visuals Launcher ${{ github.ref_name }}"
+          body: |
+            ## Pulse Visuals Launcher ${{ github.ref_name }}
+
+            ### Установка
+            - **Windows**: скачай `Pulse.Visuals.Launcher.Setup.exe` и запусти
+            - **Linux**: скачай `.AppImage`, сделай исполняемым (`chmod +x`) и запусти
+
+            ### Что внутри
+            - Браузер серверов (ugame.ru, FunTime и другие)
+            - Полная конфигурация модулей Pulse Visuals
+            - Настройки игры (RAM, разрешение, Java)
+            - Система друзей
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
