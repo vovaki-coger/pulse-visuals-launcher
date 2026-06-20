@@ -10,38 +10,89 @@
 </head>
 <body>
   <!-- TITLEBAR -->
-  <div class="titlebar" id="titlebar">
+  <div class="titlebar">
     <div class="titlebar-logo">
       <span class="logo-pv">PV</span>
       <span class="logo-text">PULSE VISUALS</span>
     </div>
-    <div class="titlebar-version">v2.4.1</div>
+    <div class="titlebar-version">v2.5.0</div>
     <div class="titlebar-controls">
-      <button class="ctrl-btn" id="btn-min" title="Свернуть">&#x2212;</button>
-      <button class="ctrl-btn" id="btn-max" title="Развернуть">&#x25A1;</button>
-      <button class="ctrl-btn ctrl-close" id="btn-close" title="Закрыть">&#x2715;</button>
+      <button class="ctrl-btn" id="btn-min">&#x2212;</button>
+      <button class="ctrl-btn" id="btn-max">&#x25A1;</button>
+      <button class="ctrl-btn ctrl-close" id="btn-close">&#x2715;</button>
     </div>
   </div>
 
-  <!-- LOGIN SCREEN -->
-  <div class="screen" id="screen-login">
-    <div class="login-bg">
-      <canvas id="particles-canvas"></canvas>
-    </div>
-    <div class="login-box">
-      <div class="login-logo">
-        <span class="logo-pv big">PV</span>
-        <div class="login-title">PULSE VISUALS</div>
-        <div class="login-subtitle">PvP на максималках</div>
+  <!-- ACCOUNT SETUP SCREEN (Legacy Launcher style) -->
+  <div class="screen" id="screen-account">
+    <div class="account-left">
+      <div class="account-brand">
+        <div class="brand-logo">PV</div>
+        <div class="brand-name">Pulse Visuals<br>Launcher</div>
+        <div class="brand-desc">Лаунчер для PvP серверов<br>ugame.ru / FunTime</div>
       </div>
-      <input class="input" id="login-user" type="text" placeholder="Никнейм" autocomplete="off" />
-      <input class="input" id="login-pass" type="password" placeholder="Пароль" />
-      <label class="checkbox-row">
-        <input type="checkbox" id="login-remember" />
-        <span>Запомнить меня</span>
-      </label>
-      <button class="btn-primary glow-pulse" id="btn-login">Войти</button>
-      <div class="login-error" id="login-error"></div>
+      <div class="account-features">
+        <div class="feat-item">
+          <span class="feat-icon">⚡</span>
+          Скачивание и запуск Minecraft
+        </div>
+        <div class="feat-item">
+          <span class="feat-icon">🎯</span>
+          Модули Pulse Visuals PvP
+        </div>
+        <div class="feat-item">
+          <span class="feat-icon">🌐</span>
+          Браузер серверов
+        </div>
+      </div>
+    </div>
+
+    <div class="account-right">
+      <h2 class="account-title">Выбор аккаунта</h2>
+
+      <!-- Offline (nickname) -->
+      <div class="acc-block active" id="acc-block-offline">
+        <div class="acc-block-header" id="acc-toggle-offline">
+          <div class="acc-radio" id="acc-radio-offline"></div>
+          <div class="acc-block-info">
+            <div class="acc-block-title">Без лицензии</div>
+            <div class="acc-block-sub">Любой никнейм, пиратские сборки</div>
+          </div>
+        </div>
+        <div class="acc-block-body" id="acc-body-offline">
+          <input class="input" id="offline-nick" type="text" placeholder="Введите никнейм" maxlength="16" autocomplete="off" />
+          <div class="nick-hint" id="nick-hint"></div>
+        </div>
+      </div>
+
+      <!-- Microsoft -->
+      <div class="acc-block" id="acc-block-ms">
+        <div class="acc-block-header" id="acc-toggle-ms">
+          <div class="acc-radio" id="acc-radio-ms"></div>
+          <div class="acc-block-info">
+            <div class="acc-block-title">Microsoft аккаунт</div>
+            <div class="acc-block-sub">Лицензионная копия Minecraft</div>
+          </div>
+        </div>
+        <div class="acc-block-body hidden" id="acc-body-ms">
+          <div class="ms-logged" id="ms-logged" style="display:none">
+            <div class="ms-avatar" id="ms-avatar">M</div>
+            <div class="ms-info">
+              <div class="ms-name" id="ms-name">—</div>
+              <div class="ms-email" id="ms-email">Microsoft аккаунт</div>
+            </div>
+            <button class="btn-danger-sm" id="btn-ms-logout">Выйти</button>
+          </div>
+          <button class="btn-ms" id="btn-ms-login">
+            <svg width="18" height="18" viewBox="0 0 21 21" fill="none"><rect x="1" y="1" width="9" height="9" fill="#F25022"/><rect x="11" y="1" width="9" height="9" fill="#7FBA00"/><rect x="1" y="11" width="9" height="9" fill="#00A4EF"/><rect x="11" y="11" width="9" height="9" fill="#FFB900"/></svg>
+            Войти через Microsoft
+          </button>
+          <div class="ms-hint">Откроется браузер для авторизации</div>
+        </div>
+      </div>
+
+      <button class="btn-primary btn-enter" id="btn-enter">Войти в лаунчер</button>
+      <div class="acc-error" id="acc-error"></div>
     </div>
   </div>
 
@@ -57,12 +108,16 @@
           <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
           Главная
         </button>
+        <button class="nav-item" data-tab="versions">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Версии
+        </button>
         <button class="nav-item" data-tab="servers">
           <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
           Серверы
         </button>
         <button class="nav-item" data-tab="modules">
-          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
           Модули
         </button>
         <button class="nav-item" data-tab="settings">
@@ -74,16 +129,17 @@
         <div class="user-avatar" id="user-avatar">P</div>
         <div class="user-info">
           <div class="user-name" id="user-name">Player</div>
-          <div class="user-status"><span class="status-dot"></span> В сети</div>
+          <div class="user-type" id="user-type">Offline</div>
         </div>
-        <button class="btn-logout" id="btn-logout" title="Выйти">
-          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        <button class="btn-change-acc" id="btn-change-acc" title="Сменить аккаунт">
+          <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
         </button>
       </div>
     </div>
 
     <!-- CONTENT -->
     <div class="content">
+
       <!-- HOME TAB -->
       <div class="tab active" id="tab-home">
         <div class="tab-scroll">
@@ -92,15 +148,15 @@
             <div class="news-card">
               <div class="news-accent" style="background:#00e5ff"></div>
               <div class="news-body">
-                <div class="news-date">18 июн 2024</div>
-                <div class="news-title">Pulse Visuals 2.4.1 — патч</div>
-                <div class="news-desc">Исправлен Auto Leave на 1.21.4, улучшен Target HUD, новые частицы ударов.</div>
+                <div class="news-date">20 июн 2024</div>
+                <div class="news-title">Pulse Visuals 2.5.0</div>
+                <div class="news-desc">Скачивание Minecraft прямо из лаунчера. Поддержка 1.8–1.21.4.</div>
               </div>
             </div>
             <div class="news-card">
               <div class="news-accent" style="background:#39ff14"></div>
               <div class="news-body">
-                <div class="news-date">12 июн 2024</div>
+                <div class="news-date">18 июн 2024</div>
                 <div class="news-title">ugame.ru — новые арены</div>
                 <div class="news-desc">Открыты 3 новые PvP-арены. Обновлена античит-система сервера.</div>
               </div>
@@ -108,33 +164,16 @@
             <div class="news-card">
               <div class="news-accent" style="background:#ff6b35"></div>
               <div class="news-body">
-                <div class="news-date">5 июн 2024</div>
+                <div class="news-date">15 июн 2024</div>
                 <div class="news-title">FunTime — ивент недели</div>
-                <div class="news-desc">Двойной опыт на всех PvP-серверах до конца недели. Новый режим 5v5.</div>
+                <div class="news-desc">Двойной опыт на всех PvP-серверах до конца недели.</div>
               </div>
             </div>
           </div>
 
           <h3 class="section-title">Избранные серверы</h3>
-          <div class="fav-servers">
-            <div class="fav-server">
-              <div class="server-icon" style="background:#00e5ff22;color:#00e5ff">U</div>
-              <div class="server-details">
-                <div class="server-name">ugame.ru</div>
-                <div class="server-desc">1,247 / 2,000 игроков</div>
-              </div>
-              <div class="server-ping green">23 мс</div>
-              <button class="btn-play-small" data-server="ugame.ru">Играть</button>
-            </div>
-            <div class="fav-server">
-              <div class="server-icon" style="background:#39ff1422;color:#39ff14">F</div>
-              <div class="server-details">
-                <div class="server-name">funtime.ru</div>
-                <div class="server-desc">891 / 1,500 игроков</div>
-              </div>
-              <div class="server-ping green">31 мс</div>
-              <button class="btn-play-small" data-server="funtime.ru">Играть</button>
-            </div>
+          <div class="fav-servers" id="fav-servers-list">
+            <!-- filled by JS -->
           </div>
         </div>
 
@@ -143,12 +182,11 @@
           <div class="play-bar-left">
             <label class="play-label">Версия</label>
             <select class="select-small" id="mc-version">
-              <option>1.21.4 Fabric</option>
-              <option>1.20.1 Fabric</option>
-              <option>1.19.4 Fabric</option>
+              <option value="">— выберите версию —</option>
             </select>
           </div>
           <button class="btn-play" id="btn-play">
+            <span id="play-icon">▶</span>
             <span id="play-text">ИГРАТЬ</span>
           </button>
           <div class="play-bar-right">
@@ -156,10 +194,36 @@
             <input type="range" min="1" max="16" value="4" id="ram-slider" class="slider" />
           </div>
         </div>
-        <!-- Launch progress (hidden by default) -->
-        <div class="launch-progress hidden" id="launch-progress">
-          <div class="launch-progress-bar" id="launch-bar"></div>
-          <div class="launch-status" id="launch-status">Запуск Minecraft...</div>
+        <div class="launch-bar-wrap" id="launch-bar-wrap" style="display:none">
+          <div class="launch-progress-track">
+            <div class="launch-progress-fill" id="launch-fill"></div>
+          </div>
+          <div class="launch-status-text" id="launch-status">Запуск...</div>
+        </div>
+      </div>
+
+      <!-- VERSIONS TAB -->
+      <div class="tab hidden" id="tab-versions">
+        <div class="tab-scroll">
+          <div class="tab-header">
+            <h2 class="tab-title">Версии Minecraft</h2>
+            <div class="ver-filter-row">
+              <label class="ver-filter-check">
+                <input type="checkbox" id="filter-release" checked>
+                <span>Релизы</span>
+              </label>
+              <label class="ver-filter-check">
+                <input type="checkbox" id="filter-snapshot">
+                <span>Снапшоты</span>
+              </label>
+              <input class="input small" id="ver-search" placeholder="Поиск..." style="width:140px" />
+            </div>
+          </div>
+
+          <div class="versions-status" id="versions-status">Загрузка списка версий...</div>
+          <div class="versions-grid" id="versions-grid">
+            <!-- filled by JS -->
+          </div>
         </div>
       </div>
 
@@ -168,21 +232,17 @@
         <div class="tab-scroll">
           <div class="tab-header">
             <h2 class="tab-title">Серверы</h2>
-            <button class="btn-secondary" id="btn-add-server">+ Добавить сервер</button>
+            <button class="btn-secondary" id="btn-add-server">+ Добавить</button>
           </div>
-
           <div class="add-server-form hidden" id="add-server-form">
             <input class="input" id="new-server-name" placeholder="Название" />
-            <input class="input" id="new-server-ip" placeholder="IP адрес (например: play.example.com)" />
+            <input class="input" id="new-server-ip" placeholder="IP (например: play.example.com)" />
             <div style="display:flex;gap:8px;margin-top:4px">
               <button class="btn-primary" id="btn-save-server">Сохранить</button>
               <button class="btn-secondary" id="btn-cancel-server">Отмена</button>
             </div>
           </div>
-
-          <div class="servers-list" id="servers-list">
-            <!-- filled by JS -->
-          </div>
+          <div class="servers-list" id="servers-list"></div>
         </div>
       </div>
 
@@ -191,21 +251,19 @@
         <div class="tab-scroll modules-layout">
           <div class="modules-sidebar">
             <div class="modules-cat active" data-cat="visuals">
-              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
               Визуальные
             </div>
             <div class="modules-cat" data-cat="utilities">
-              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+              <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
               Утилиты
             </div>
             <div class="modules-cat" data-cat="hud">
-              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+              <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
               HUD
             </div>
           </div>
-          <div class="modules-list" id="modules-list">
-            <!-- filled by JS -->
-          </div>
+          <div class="modules-list" id="modules-list"></div>
         </div>
       </div>
 
@@ -213,11 +271,12 @@
       <div class="tab hidden" id="tab-settings">
         <div class="tab-scroll">
           <h2 class="tab-title">Настройки</h2>
+
           <div class="settings-section">
-            <h3 class="settings-group-title">Игровые настройки</h3>
+            <h3 class="settings-group-title">Игра</h3>
             <div class="settings-grid">
               <div class="settings-row">
-                <label>Выделить RAM</label>
+                <label>RAM</label>
                 <div class="settings-control">
                   <input type="range" min="1" max="16" value="4" id="set-ram" class="slider" />
                   <span id="set-ram-label">4 GB</span>
@@ -229,23 +288,30 @@
                   <option>854x480</option>
                   <option>1280x720</option>
                   <option selected>1920x1080</option>
-                  <option>Пользовательское</option>
+                  <option>2560x1440</option>
                 </select>
               </div>
               <div class="settings-row">
-                <label>Полноэкранный режим</label>
+                <label>Полноэкранный</label>
                 <button class="toggle-btn" id="set-fullscreen" data-state="off">ВЫКЛ</button>
               </div>
               <div class="settings-row">
-                <label>Путь к Java</label>
+                <label>Java</label>
                 <div style="display:flex;gap:8px;flex:1">
-                  <input class="input" id="set-java-path" placeholder="C:\Program Files\Java\jdk-21" style="flex:1" />
-                  <button class="btn-secondary small">Обзор</button>
+                  <input class="input" id="set-java-path" placeholder="Авто-определение" style="flex:1;font-size:12px" />
+                  <button class="btn-secondary small" id="btn-pick-java">Обзор</button>
                 </div>
               </div>
               <div class="settings-row">
                 <label>JVM аргументы</label>
                 <textarea class="input" id="set-jvm" rows="2" style="flex:1;resize:vertical">-XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=200</textarea>
+              </div>
+              <div class="settings-row">
+                <label>Папка .minecraft</label>
+                <div style="display:flex;gap:8px;flex:1">
+                  <input class="input" id="set-mc-dir" placeholder="Стандартная" style="flex:1;font-size:12px" readonly />
+                  <button class="btn-secondary small" id="btn-pick-mc-dir">Изменить</button>
+                </div>
               </div>
             </div>
           </div>
@@ -258,22 +324,21 @@
                 <input class="input" id="set-nickname" style="flex:1" />
               </div>
               <div class="settings-row">
-                <label>UUID</label>
-                <input class="input" id="set-uuid" readonly style="flex:1;opacity:0.5" />
-              </div>
-              <div class="settings-row">
                 <label>Тип аккаунта</label>
-                <span class="badge">Offline</span>
+                <span class="badge" id="set-acc-type">Offline</span>
               </div>
               <div class="settings-row">
-                <label>Скин</label>
-                <button class="btn-secondary">Сменить скин</button>
+                <label></label>
+                <button class="btn-secondary" id="btn-change-acc-settings">Сменить аккаунт</button>
               </div>
             </div>
           </div>
-          <button class="btn-primary" id="btn-save-settings" style="margin-top:16px;width:200px">Сохранить настройки</button>
+
+          <button class="btn-primary" id="btn-save-settings" style="margin-top:16px;width:200px">Сохранить</button>
+          <div class="save-ok" id="save-ok">✓ Сохранено</div>
         </div>
       </div>
+
     </div>
   </div>
 
